@@ -1,4 +1,4 @@
-#Linux Commands
-##List files
+# Linux Commands
+## List files
 ls -la
 Shows all files including hidden files.
