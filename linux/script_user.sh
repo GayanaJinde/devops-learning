@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "This job is running as: $(whoami)"
