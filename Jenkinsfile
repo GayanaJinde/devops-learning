@@ -17,6 +17,9 @@ pipeline {
       }
     }
     stage('Test') {
+      agent {
+        label 'ubuntu'
+      }
       steps {
         echo 'Test stage'
       }
