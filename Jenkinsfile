@@ -3,7 +3,14 @@ pipeline {
     label 'jenkins-git'
   }
 
-  env
+  parameters {
+    string(
+      name: 'VERSION',
+      defaultValue: '1.0',
+      description: 'Enter application version'
+    )
+  }
+
   stages {
     stage('Checkout') {
       steps {
