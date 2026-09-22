@@ -2,6 +2,8 @@ pipeline {
   agent {
     label 'jenkins-git'
   }
+
+  env
   stages {
     stage('Checkout') {
       steps {
