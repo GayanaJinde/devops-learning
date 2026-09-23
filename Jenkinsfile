@@ -89,10 +89,10 @@ pipeline {
             sh '''
               echo "Files received by Test:"
               
-              find . -type f -not -path "./build/*" | sort > test_files.txt
+              find . -type f -not -path "./build/*" | sort > build/test_files.txt
               cat test_files.txt
 
-              if cmp -s build/files.txt test_files.txt; then
+              if cmp -s build/files.txt build/test_files.txt; then
                 echo "TEST PASSED - Files are the same"
                 exit 0
               else
