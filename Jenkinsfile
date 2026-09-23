@@ -52,7 +52,7 @@ pipeline {
             sh '''
               echo "Starting build..."
               mkdir -p ${BUILD_DIR}
-              find . -type f -not path -not -path "./build/*" | wc -l > ${BUILD_DIR}/file_count.txt
+              find . -type f -not -path "./build/*" | wc -l > ${BUILD_DIR}/file_count.txt
 
               echo "Application Version: ${VERSION}" > ${BUILD_DIR}/app.txt
               echo "Build Successful" >> ${BUILD_DIR}/app.txt
@@ -128,16 +128,16 @@ pipeline {
       echo "Pipeline completed successfully"
       mail (
         to: 'gayanajinde@gmail.com',
-        subject: 'SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}',
-        body: 'Pipeline completed successfully. Build URL: ${env.BUILD_URL}'
+        subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+        body: "Pipeline completed successfully. Build URL: ${env.BUILD_URL}"
       )
     }
     failure {
       echo "Pipeline failed"
       mail (
         to: 'gayanajinde@gmail.com',
-        subject: 'FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}',
-        body: 'Pipeline Failed. Check Jenkins: ${env.BUILD_URL}'
+        subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+        body: "Pipeline Failed. Check Jenkins: ${env.BUILD_URL}"
       )
     }
   }
