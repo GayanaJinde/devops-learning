@@ -57,7 +57,7 @@ pipeline {
               echo "Build Successful" >> ${BUILD_DIR}/app.txt
 
               # Store list of source files
-              find . -type f -not -path "./build/*" | sort > ${BUILD_DIR}/files.txt
+              find . -type f -not -path "./build/*" -not -path "./.git/*" | sort > ${BUILD_DIR}/files.txt
 
               echo "Files available during Build:"
               cat ${BUILD_DIR}/files.txt
@@ -82,15 +82,15 @@ pipeline {
           }
           steps {
             echo "Running Tests..."
-            
+            deleteDir()
             //Bring Source's and Build's output into this agent
             unstash 'build-output'
             
             sh '''
               echo "Files received by Test:"
               
-              find . -type f -not -path "./build/*" | sort > build/test_files.txt
-              cat test_files.txt
+              find . -type f -not -path "./build/*" -not -path "./.git/*" | sort > build/test_files.txt
+              cat build/test_files.txt
 
               if cmp -s build/files.txt build/test_files.txt; then
                 echo "TEST PASSED - Files are the same"
