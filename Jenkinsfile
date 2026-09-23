@@ -59,12 +59,9 @@ pipeline {
             '''
 
             //save build output for another agent
-            stash name: 'build-files',
-                  includes: 'build/**'
-
-            stash name: 'source-for-test',
+            stash name: 'build-output',
                   includes: '**',
-                  excludes: 'build/**'
+                  excludes: '.git/**'
           }
         }
 
