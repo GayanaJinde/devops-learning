@@ -52,10 +52,15 @@ pipeline {
             sh '''
               echo "Starting build..."
               mkdir -p ${BUILD_DIR}
-              find . -type f -not -path "./build/*" | wc -l > ${BUILD_DIR}/file_count.txt
 
               echo "Application Version: ${VERSION}" > ${BUILD_DIR}/app.txt
               echo "Build Successful" >> ${BUILD_DIR}/app.txt
+
+              # Store list of source files
+              find . -type f -not -path "./build/*" | sort > ${BUILD_DIR}/files.txt
+
+              echo "Files available during Build:"
+              cat ${BUILD_DIR}/files.txt
             '''
 
             //save build output for another agent
@@ -79,21 +84,19 @@ pipeline {
             echo "Running Tests..."
             
             //Bring Source's and Build's output into this agent
-            unstash 'source-for-test'
-            unstash 'build-files'
+            unstash 'build-output'
             
             sh '''
-              BUILD_COUNT=$(cat build/file_count.txt)
-              CURRENT_COUNT=$(find . -type f -not -path "./build/*" | wc -l)
+              echo "Files received by Test:"
+              
+              find . -type f -not -path "./build/*" | sort > test_files.txt
+              cat test_files.txt
 
-              echo "Build counted: $BUILD_COUNT files"
-              echo "Test counted: $CURRENT_COUNT files"
-
-              if [ "$BUILD_COUNT" -eq "$CURRENT_COUNT" ]; then
-                echo "TEST PASSED"
+              if cmp -s build/files.txt test_files.txt; then
+                echo "TEST PASSED - Files are the same"
                 exit 0
               else
-                echo "TEST FAILED"
+                echo "TEST FAILED - Files are different"
                 exit 1
               fi
           '''
